@@ -1,0 +1,1701 @@
+{
+  "name": "Reparied Workflow - Hybrid Score Cover Letter",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 17
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        3328,
+        912
+      ],
+      "id": "d1ac76a9-a61c-4bc3-87b7-03bfd5a866e1",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "https://drive.google.com/file/d/1UDY8fuI_sbvCo4Rk9CuRfjZ1L5VovZfE/view",
+          "mode": "url"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        3600,
+        912
+      ],
+      "id": "00cad10a-11af-436f-af3b-21afe18da3d4",
+      "name": "Download file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "zAp1KlBCHvtsMTdg",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.1,
+      "position": [
+        3856,
+        912
+      ],
+      "id": "eacba75f-e5e2-49c6-aa0f-2588370210f8",
+      "name": "Extract from File"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1oS7HpTvRz0I7BmqDJDgVv6M00eguW-gLSIzlsVZqpy4",
+          "mode": "list",
+          "cachedResultName": "Job Search n8n",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1oS7HpTvRz0I7BmqDJDgVv6M00eguW-gLSIzlsVZqpy4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Filter",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1oS7HpTvRz0I7BmqDJDgVv6M00eguW-gLSIzlsVZqpy4/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        4128,
+        912
+      ],
+      "id": "a0c54632-ec26-4e68-94c9-d407ed5a7da7",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "9ysMJtEtxd2gBJTv",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.url }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "User-Agent",
+              "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36"
+            },
+            {
+              "name": "Accept",
+              "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+            },
+            {
+              "name": "Accept-Language",
+              "value": "en-US,en;q=0.9"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        4656,
+        912
+      ],
+      "id": "2aa6382c-b71b-4daf-b436-e6d6019c2436",
+      "name": "Fetch Jobs from LinkedIn"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        7488,
+        2192
+      ],
+      "id": "79bc34d8-5c1f-4aab-98e6-353241044b3f",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "amount": 12
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        3328,
+        1168
+      ],
+      "id": "818acc4c-ea66-4b75-9ade-eb5bc4714f22",
+      "name": "Wait",
+      "webhookId": "a0107004-68b5-4e7e-ab79-d74465e137dc"
+    },
+    {
+      "parameters": {
+        "chatId": "1769906044",
+        "text": "=Title: {{ $json.Title }}\nCompany: {{ $json.Company }}\nLocation: {{ $json.Location }}\nJob Score: {{ $json.score }}\nApply: {{ $json.link }}\n",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        6144,
+        1456
+      ],
+      "id": "e0a8cef2-c3ea-4612-a390-3236d21495cd",
+      "name": "Send a text message",
+      "webhookId": "b73526a8-2aa0-4ada-bc22-ba6a5650757c",
+      "credentials": {
+        "telegramApi": {
+          "id": "b8h0tDT5fFoApOnV",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "37726246-4260-48b1-b79d-189075510bec",
+              "name": "description",
+              "value": "={{ $json.description.replaceAll(/\\s+/g, \" \") }}",
+              "type": "string"
+            },
+            {
+              "id": "b38164a4-b1cd-40a3-85d5-712778b26698",
+              "name": "jobid",
+              "value": "={{ $json.jobid.split(\":\").last() }}",
+              "type": "string"
+            },
+            {
+              "id": "147a346c-1096-4238-a54a-1d8a0edb40b5",
+              "name": "applyLink",
+              "value": "={{ \"http://www.linkedin.com/jobs/view/\"+ $json.jobid.split(\":\").last() }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3840,
+        1168
+      ],
+      "id": "4a59799b-30c6-48a1-96b0-6df3159623c9",
+      "name": "Company Details"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.links }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        3504,
+        1168
+      ],
+      "id": "dd7bcfae-6412-42aa-8eea-a33a490f2f23",
+      "name": "Company HTTP"
+    },
+    {
+      "parameters": {
+        "operation": "extractHtmlContent",
+        "extractionValues": {
+          "values": [
+            {
+              "key": "links",
+              "cssSelector": "a.base-card__full-link",
+              "returnValue": "attribute",
+              "attribute": "href",
+              "returnArray": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1.2,
+      "position": [
+        4880,
+        912
+      ],
+      "id": "b8c3b031-a0a1-460b-8f35-ab9e1e2c0415",
+      "name": "Extract Links"
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.first();\nconst sourceLinks = Array.isArray(item.json.links) ? item.json.links : [];\n\nfunction normalizeLink(rawLink) {\n  const link = String(rawLink ?? '').trim();\n  if (!link) return null;\n\n  try {\n    const url = new URL(link);\n    const jobMatch = url.pathname.match(/\\/jobs\\/view\\/(\\d+)/i);\n\n    if (jobMatch) {\n      return `https://www.linkedin.com/jobs/view/${jobMatch[1]}`;\n    }\n\n    url.search = '';\n    url.hash = '';\n    return url.toString().replace(/\\/$/, '');\n  } catch {\n    return link.replace(/[?#].*$/, '').replace(/\\/$/, '');\n  }\n}\n\nconst seen = new Set();\nconst uniqueLinks = [];\n\nfor (const rawLink of sourceLinks) {\n  const normalizedLink = normalizeLink(rawLink);\n\n  if (!normalizedLink || seen.has(normalizedLink)) {\n    continue;\n  }\n\n  seen.add(normalizedLink);\n  uniqueLinks.push(normalizedLink);\n}\n\nreturn [{ json: { ...item.json, links: uniqueLinks } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        5280,
+        944
+      ],
+      "id": "2542e3fd-a9c8-4349-962d-717ce218da13",
+      "name": "Deduplicate Links"
+    },
+    {
+      "parameters": {
+        "operation": "extractHtmlContent",
+        "extractionValues": {
+          "values": [
+            {
+              "key": "title",
+              "cssSelector": "div h1"
+            },
+            {
+              "key": "company",
+              "cssSelector": "div span a"
+            },
+            {
+              "key": "location",
+              "cssSelector": "span.topcard__flavor.topcard__flavor--bullet"
+            },
+            {
+              "key": "description",
+              "cssSelector": "div.description__text.description__text--rich"
+            },
+            {
+              "key": "jobid",
+              "cssSelector": "a[data-item-type=\"semaphore\"]",
+              "returnValue": "attribute",
+              "attribute": "data-semaphore-content-urn"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1.2,
+      "position": [
+        3680,
+        1168
+      ],
+      "id": "7234c17d-e215-4986-9b6e-382fdcde025e",
+      "name": "Extract Company Details"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "links",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        5728,
+        976
+      ],
+      "id": "29e8b547-06c5-4766-89dc-5f9333a23667",
+      "name": "Split Links"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1oS7HpTvRz0I7BmqDJDgVv6M00eguW-gLSIzlsVZqpy4",
+          "mode": "list",
+          "cachedResultName": "Job Search n8n",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1oS7HpTvRz0I7BmqDJDgVv6M00eguW-gLSIzlsVZqpy4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1280675613,
+          "mode": "list",
+          "cachedResultName": "Result",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1oS7HpTvRz0I7BmqDJDgVv6M00eguW-gLSIzlsVZqpy4/edit#gid=1280675613"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "link": "={{ $('Company Details').item.json.applyLink }}",
+            "Title": "={{ $('Company Details').item.json.title }}",
+            "Company": "={{ $('Company Details').item.json.company }}",
+            "Location": "={{ $('Company Details').item.json.location }}",
+            "description": "={{ $('Company Details').item.json.description }}",
+            "score": "={{ $json.score }}",
+            "Cover Letter": "={{ $json.coverletter || \"\" }}"
+          },
+          "matchingColumns": [
+            "link"
+          ],
+          "schema": [
+            {
+              "id": "Title",
+              "displayName": "Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Company",
+              "displayName": "Company",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Location",
+              "displayName": "Location",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "link",
+              "displayName": "link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "score",
+              "displayName": "score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "description",
+              "displayName": "description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Cover Letter",
+              "displayName": "Cover Letter",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        5936,
+        1456
+      ],
+      "id": "406571d2-0392-42f1-86ea-b11c86e44c34",
+      "name": "Append Company details in Result Sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "9ysMJtEtxd2gBJTv",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash-lite",
+        "options": {
+          "maxOutputTokens": 120,
+          "temperature": 0.1,
+          "topK": 20,
+          "topP": 0.8
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        3344,
+        1600
+      ],
+      "id": "be7e17d8-9c68-4e58-afcc-13db6f6f4e07",
+      "name": "Score Gemini Model",
+      "notesInFlow": false,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "oNvcd8nQA5fZ6Mwj",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "openrouter/free",
+        "options": {
+          "maxTokens": 140,
+          "responseFormat": "json_object",
+          "temperature": 0.1,
+          "topP": 0.8
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        3536,
+        1888
+      ],
+      "id": "eaab5d7c-45e2-40ab-882a-c10d48865ad6",
+      "name": "Score OpenRouter Model",
+      "notesInFlow": false,
+      "credentials": {
+        "openRouterApi": {
+          "id": "ltVxNt4i9mMtOJwa",
+          "name": "OpenRouter account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "tinyllama:latest",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+      "typeVersion": 1,
+      "position": [
+        3872,
+        2256
+      ],
+      "id": "3549e6f0-007c-4f04-a822-e353badaa481",
+      "name": "Score Ollama Model",
+      "credentials": {
+        "ollamaApi": {
+          "id": "kg7xDey1fSiJS4oG",
+          "name": "Ollama account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are a resume-job matching assistant.\n\nReturn only valid JSON:\n{\"score\":0}\n\nRules:\n- score must be an integer from 0 to 100\n- do not add markdown\n- do not add code fences\n- do not add explanations\n- do not add extra keys\n- be strict and evidence-based\n- do not assume skills that are not shown in the resume\n- prioritize Python, AI automation, APIs, deployment, workflow tools, data processing, and business automation only if the job description requires them\n\nResume:\n{{ String($('Extract from File').item.json.text || '').slice(0, 1800) }}\n\nJob Description:\n{{ String($('Company Details').item.json.description || $json.description || '').slice(0, 1400) }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        3344,
+        1424
+      ],
+      "id": "2f9c4cbe-70b4-45f7-bb3d-6997920aa1cb",
+      "name": "Score - Gemini",
+      "retryOnFail": false,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are a resume-job matching assistant.\n\nReturn only valid JSON:\n{\"score\":0}\n\nRules:\n- score must be an integer from 0 to 100\n- do not add markdown\n- do not add code fences\n- do not add explanations\n- do not add extra keys\n- be strict and evidence-based\n- do not assume skills that are not shown in the resume\n- prioritize Python, AI automation, APIs, deployment, workflow tools, data processing, and business automation only if the job description requires them\n\nResume:\n{{ String($('Extract from File').item.json.text || '').slice(0, 1800) }}\n\nJob Description:\n{{ String($('Company Details').item.json.description || $json.description || '').slice(0, 1400) }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        3536,
+        1712
+      ],
+      "id": "4af26e38-37a8-40fd-a875-077e12aaa743",
+      "name": "Score - OpenRouter",
+      "retryOnFail": false,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are a resume-job matching assistant.\n\nReturn only valid JSON:\n{\"score\":0}\n\nRules:\n- score must be an integer from 0 to 100\n- do not add markdown\n- do not add code fences\n- do not add explanations\n- do not add extra keys\n- be strict and evidence-based\n- do not assume skills that are not shown in the resume\n- prioritize Python, AI automation, APIs, deployment, workflow tools, data processing, and business automation only if the job description requires them\n\nResume:\n{{ String($('Extract from File').item.json.text || '').slice(0, 1800) }}\n\nJob Description:\n{{ String($('Company Details').item.json.description || $json.description || '').slice(0, 1400) }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        3872,
+        2080
+      ],
+      "id": "ab35f0ae-1812-4f01-8eb6-ea7d32527c97",
+      "name": "Score - Ollama",
+      "retryOnFail": false,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first().json;\nconst source = \"gemini\";\n\nfunction toRaw(value) {\n  if (value == null) return \"\";\n  if (typeof value === \"string\") return value;\n  try {\n    return JSON.stringify(value);\n  } catch (error) {\n    return String(value);\n  }\n}\n\nfunction parseJsonLike(text) {\n  const cleaned = String(text || \"\")\n    .replace(/```json/gi, \"\")\n    .replace(/```/g, \"\")\n    .trim();\n\n  const match = cleaned.match(/\\{[\\s\\S]*\\}/);\n  if (!match) return null;\n\n  try {\n    return JSON.parse(match[0]);\n  } catch (error) {\n    return null;\n  }\n}\n\nlet parsed = null;\n\nif (input.output && typeof input.output === \"object\") {\n  parsed = input.output;\n} else {\n  const raw = input.output ?? input.text ?? input.response ?? input.content ?? input;\n  parsed = parseJsonLike(toRaw(raw));\n}\n\nconst numericScore = Number(parsed?.score);\nconst score = Number.isFinite(numericScore)\n  ? Math.max(0, Math.min(100, Math.round(numericScore)))\n  : -1;\n\nreturn [{\n  json: {\n    score,\n    scoreValid: score >= 0 ? 1 : 0,\n    scoreSource: source,\n    scoringError: score >= 0 ? \"\" : `Invalid score output from ${source}`,\n    rawModelOutput: toRaw(input.output ?? input.text ?? input.response ?? input.content ?? input)\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3632,
+        1408
+      ],
+      "id": "a6ec39e1-1513-4c9b-b662-d82aeea183df",
+      "name": "Parse Score - Gemini"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "8d432393-7f2d-44af-87cf-d452696f7d2c",
+              "leftValue": "={{ $json.score }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        3808,
+        1408
+      ],
+      "id": "4115f7b8-4185-41d7-8f75-2b676e327058",
+      "name": "Score Ready - Gemini"
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first().json;\nconst source = \"openrouter\";\n\nfunction toRaw(value) {\n  if (value == null) return \"\";\n  if (typeof value === \"string\") return value;\n  try {\n    return JSON.stringify(value);\n  } catch (error) {\n    return String(value);\n  }\n}\n\nfunction parseJsonLike(text) {\n  const cleaned = String(text || \"\")\n    .replace(/```json/gi, \"\")\n    .replace(/```/g, \"\")\n    .trim();\n\n  const match = cleaned.match(/\\{[\\s\\S]*\\}/);\n  if (!match) return null;\n\n  try {\n    return JSON.parse(match[0]);\n  } catch (error) {\n    return null;\n  }\n}\n\nlet parsed = null;\n\nif (input.output && typeof input.output === \"object\") {\n  parsed = input.output;\n} else {\n  const raw = input.output ?? input.text ?? input.response ?? input.content ?? input;\n  parsed = parseJsonLike(toRaw(raw));\n}\n\nconst numericScore = Number(parsed?.score);\nconst score = Number.isFinite(numericScore)\n  ? Math.max(0, Math.min(100, Math.round(numericScore)))\n  : -1;\n\nreturn [{\n  json: {\n    score,\n    scoreValid: score >= 0 ? 1 : 0,\n    scoreSource: source,\n    scoringError: score >= 0 ? \"\" : `Invalid score output from ${source}`,\n    rawModelOutput: toRaw(input.output ?? input.text ?? input.response ?? input.content ?? input)\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3824,
+        1696
+      ],
+      "id": "acc79f88-bfd7-49bf-b081-26d79af7d51a",
+      "name": "Parse Score - OpenRouter"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "73a018e6-9613-46f2-ac05-7f6ad1a951c6",
+              "leftValue": "={{ $json.score }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        3984,
+        1696
+      ],
+      "id": "96649e9a-aa9e-47ff-a76f-cab2db6bb82c",
+      "name": "Score Ready - OpenRouter"
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first().json;\nconst source = \"ollama\";\n\nfunction toRaw(value) {\n  if (value == null) return \"\";\n  if (typeof value === \"string\") return value;\n  try {\n    return JSON.stringify(value);\n  } catch (error) {\n    return String(value);\n  }\n}\n\nfunction parseJsonLike(text) {\n  const cleaned = String(text || \"\")\n    .replace(/```json/gi, \"\")\n    .replace(/```/g, \"\")\n    .trim();\n\n  const match = cleaned.match(/\\{[\\s\\S]*\\}/);\n  if (!match) return null;\n\n  try {\n    return JSON.parse(match[0]);\n  } catch (error) {\n    return null;\n  }\n}\n\nlet parsed = null;\n\nif (input.output && typeof input.output === \"object\") {\n  parsed = input.output;\n} else {\n  const raw = input.output ?? input.text ?? input.response ?? input.content ?? input;\n  parsed = parseJsonLike(toRaw(raw));\n}\n\nconst numericScore = Number(parsed?.score);\nconst score = Number.isFinite(numericScore)\n  ? Math.max(0, Math.min(100, Math.round(numericScore)))\n  : -1;\n\nreturn [{\n  json: {\n    score,\n    scoreValid: score >= 0 ? 1 : 0,\n    scoreSource: source,\n    scoringError: score >= 0 ? \"\" : `Invalid score output from ${source}`,\n    rawModelOutput: toRaw(input.output ?? input.text ?? input.response ?? input.content ?? input)\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4144,
+        2064
+      ],
+      "id": "eea303e1-6587-418e-8cb1-b11c2f2d7097",
+      "name": "Parse Score - Ollama"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "37e3d47e-8553-4147-a905-ce92e191e512",
+              "leftValue": "={{ $json.score }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        4304,
+        2064
+      ],
+      "id": "367f1b04-7282-40a9-be09-ca46b735b2b1",
+      "name": "Score Ready - Ollama"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "96a43914-94fa-43f2-9569-9527c2707ed8",
+              "name": "score",
+              "value": 0,
+              "type": "number"
+            },
+            {
+              "id": "2402839a-d7ed-4576-93d1-a24d572af473",
+              "name": "scoreValid",
+              "value": 0,
+              "type": "number"
+            },
+            {
+              "id": "914bc850-e154-40e4-a49e-731da1b97e0c",
+              "name": "scoreSource",
+              "value": "default",
+              "type": "string"
+            },
+            {
+              "id": "71754b20-5560-405a-81c7-178e6edc3af7",
+              "name": "coverletter",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "9adf1208-6cbd-4a86-a718-fe7e7f499611",
+              "name": "scoringError",
+              "value": "={{ $json.error?.message || $json.message || 'All score providers failed or returned invalid JSON' }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        4304,
+        1712
+      ],
+      "id": "d68bd479-bac6-40d4-9ad8-5f09097d44c5",
+      "name": "Score Failure Default"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "dc3dec05-6f54-4402-8663-2475197a05d7",
+              "leftValue": "={{ $json.score }}",
+              "rightValue": 50,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        4208,
+        1424
+      ],
+      "id": "2f028e11-870b-40d6-9800-eeb0c874270b",
+      "name": "If Generate Cover Letter"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash-lite",
+        "options": {
+          "maxOutputTokens": 500,
+          "temperature": 0.25,
+          "topK": 25,
+          "topP": 0.9
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        4416,
+        1360
+      ],
+      "id": "0620a00a-952e-4ef4-bed3-410c5a510aa8",
+      "name": "Cover Letter Gemini Model",
+      "notesInFlow": false,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "oNvcd8nQA5fZ6Mwj",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "openrouter/free",
+        "options": {
+          "maxTokens": 500,
+          "responseFormat": "json_object",
+          "temperature": 0.2,
+          "topP": 0.9
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        4640,
+        1632
+      ],
+      "id": "0bce56b9-2bb7-46e4-80ca-b90429445f80",
+      "name": "Cover Letter OpenRouter Model",
+      "notesInFlow": false,
+      "credentials": {
+        "openRouterApi": {
+          "id": "ltVxNt4i9mMtOJwa",
+          "name": "OpenRouter account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "qwen2.5:7b",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+      "typeVersion": 1,
+      "position": [
+        5232,
+        2064
+      ],
+      "id": "e11ebfe7-bce2-4efb-b157-a9edfae7f282",
+      "name": "Cover Letter Ollama Model",
+      "credentials": {
+        "ollamaApi": {
+          "id": "kg7xDey1fSiJS4oG",
+          "name": "Ollama account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are a professional cover letter assistant.\n\nReturn only valid JSON:\n{\"coverletter\":\"\"}\n\nRules:\n- write exactly 2 paragraphs\n- separate paragraphs with \\n\\n\n- each paragraph should be detailed and role-specific\n- no greeting\n- no closing\n- no markdown\n- no bullet points\n- do not invent skills, experience, tools, or achievements\n- use only the resume and the job description\n- keep the writing focused on the strongest relevant matches\n\nResume:\n{{ String($('Extract from File').item.json.text || '').slice(0, 2200) }}\n\nJob Description:\n{{ String($('Company Details').item.json.description || $json.description || '').slice(0, 1600) }}\n\nMatch Score:\n{{ $('If Generate Cover Letter').item.json.score }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        4416,
+        1216
+      ],
+      "id": "584d8952-1bad-49f4-90d2-b2d377e6ba43",
+      "name": "Cover Letter - Gemini",
+      "retryOnFail": false,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are a professional cover letter assistant.\n\nReturn only valid JSON:\n{\"coverletter\":\"\"}\n\nRules:\n- write exactly 2 paragraphs\n- separate paragraphs with \\n\\n\n- each paragraph should be detailed and role-specific\n- no greeting\n- no closing\n- no markdown\n- no bullet points\n- do not invent skills, experience, tools, or achievements\n- use only the resume and the job description\n- keep the writing focused on the strongest relevant matches\n\nResume:\n{{ String($('Extract from File').item.json.text || '').slice(0, 2200) }}\n\nJob Description:\n{{ String($('Company Details').item.json.description || $json.description || '').slice(0, 1600) }}\n\nMatch Score:\n{{ $('If Generate Cover Letter').item.json.score }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        4624,
+        1504
+      ],
+      "id": "f761cf14-def7-42fd-b237-8206e3e250ac",
+      "name": "Cover Letter - OpenRouter",
+      "retryOnFail": false,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are a professional cover letter assistant.\n\nReturn only valid JSON:\n{\"coverletter\":\"\"}\n\nRules:\n- write exactly 2 paragraphs\n- separate paragraphs with \\n\\n\n- each paragraph should be detailed and role-specific\n- no greeting\n- no closing\n- no markdown\n- no bullet points\n- do not invent skills, experience, tools, or achievements\n- use only the resume and the job description\n- keep the writing focused on the strongest relevant matches\n\nResume:\n{{ String($('Extract from File').item.json.text || '').slice(0, 2200) }}\n\nJob Description:\n{{ String($('Company Details').item.json.description || $json.description || '').slice(0, 1600) }}\n\nMatch Score:\n{{ $('If Generate Cover Letter').item.json.score }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        5232,
+        1904
+      ],
+      "id": "985067b7-deb0-409a-beb5-d29dec49ef5a",
+      "name": "Cover Letter - Ollama",
+      "retryOnFail": false,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first().json;\nconst source = \"gemini\";\nconst score = Number($('If Generate Cover Letter').first().json.score ?? -1);\n\nfunction toRaw(value) {\n  if (value == null) return \"\";\n  if (typeof value === \"string\") return value;\n  try {\n    return JSON.stringify(value);\n  } catch (error) {\n    return String(value);\n  }\n}\n\nfunction parseJsonLike(text) {\n  const cleaned = String(text || \"\")\n    .replace(/```json/gi, \"\")\n    .replace(/```/g, \"\")\n    .trim();\n\n  const match = cleaned.match(/\\{[\\s\\S]*\\}/);\n  if (!match) return null;\n\n  try {\n    return JSON.parse(match[0]);\n  } catch (error) {\n    return null;\n  }\n}\n\nfunction normalizeText(text) {\n  return String(text || \"\")\n    .replace(/```json/gi, \"\")\n    .replace(/```/g, \"\")\n    .replace(/\\r/g, \"\")\n    .trim();\n}\n\nlet coverletter = \"\";\n\nif (input.output && typeof input.output === \"object\") {\n  coverletter = input.output.coverletter ?? \"\";\n} else {\n  const raw = toRaw(input.output ?? input.text ?? input.response ?? input.content ?? input);\n  const parsed = parseJsonLike(raw);\n  coverletter = parsed?.coverletter ?? raw;\n}\n\ncoverletter = normalizeText(coverletter);\n\nconst paragraphs = coverletter\n  .split(/\\n\\s*\\n/)\n  .map((paragraph) => paragraph.trim())\n  .filter(Boolean);\n\nconst isValid = paragraphs.length === 2 && paragraphs.every((paragraph) => {\n  const words = paragraph.split(/\\s+/).filter(Boolean);\n  return words.length >= 35;\n});\n\nreturn [{\n  json: {\n    score,\n    coverletter: isValid ? coverletter : \"\",\n    coverletterValid: isValid ? 1 : 0,\n    coverletterSource: source,\n    coverletterError: isValid ? \"\" : `Invalid cover letter output from ${source}`,\n    rawModelOutput: toRaw(input.output ?? input.text ?? input.response ?? input.content ?? input)\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4752,
+        1200
+      ],
+      "id": "ca216278-3304-4475-a9a8-d36fc1a98369",
+      "name": "Parse Cover Letter - Gemini"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "9777b380-6b04-4fc7-afd0-3ce787182a32",
+              "leftValue": "={{ $json.coverletterValid }}",
+              "rightValue": 1,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        4960,
+        1200
+      ],
+      "id": "ee1bc233-a5e5-47e5-8b76-ee70a4078879",
+      "name": "Cover Letter Ready - Gemini"
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first().json;\nconst source = \"openrouter\";\nconst score = Number($('If Generate Cover Letter').first().json.score ?? -1);\n\nfunction toRaw(value) {\n  if (value == null) return \"\";\n  if (typeof value === \"string\") return value;\n  try {\n    return JSON.stringify(value);\n  } catch (error) {\n    return String(value);\n  }\n}\n\nfunction parseJsonLike(text) {\n  const cleaned = String(text || \"\")\n    .replace(/```json/gi, \"\")\n    .replace(/```/g, \"\")\n    .trim();\n\n  const match = cleaned.match(/\\{[\\s\\S]*\\}/);\n  if (!match) return null;\n\n  try {\n    return JSON.parse(match[0]);\n  } catch (error) {\n    return null;\n  }\n}\n\nfunction normalizeText(text) {\n  return String(text || \"\")\n    .replace(/```json/gi, \"\")\n    .replace(/```/g, \"\")\n    .replace(/\\r/g, \"\")\n    .trim();\n}\n\nlet coverletter = \"\";\n\nif (input.output && typeof input.output === \"object\") {\n  coverletter = input.output.coverletter ?? \"\";\n} else {\n  const raw = toRaw(input.output ?? input.text ?? input.response ?? input.content ?? input);\n  const parsed = parseJsonLike(raw);\n  coverletter = parsed?.coverletter ?? raw;\n}\n\ncoverletter = normalizeText(coverletter);\n\nconst paragraphs = coverletter\n  .split(/\\n\\s*\\n/)\n  .map((paragraph) => paragraph.trim())\n  .filter(Boolean);\n\nconst isValid = paragraphs.length === 2 && paragraphs.every((paragraph) => {\n  const words = paragraph.split(/\\s+/).filter(Boolean);\n  return words.length >= 35;\n});\n\nreturn [{\n  json: {\n    score,\n    coverletter: isValid ? coverletter : \"\",\n    coverletterValid: isValid ? 1 : 0,\n    coverletterSource: source,\n    coverletterError: isValid ? \"\" : `Invalid cover letter output from ${source}`,\n    rawModelOutput: toRaw(input.output ?? input.text ?? input.response ?? input.content ?? input)\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4912,
+        1488
+      ],
+      "id": "48d9817f-61f6-4479-a27c-666e3260be65",
+      "name": "Parse Cover Letter - OpenRouter"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "c7846cfe-b945-4513-af58-444f713d2b84",
+              "leftValue": "={{ $json.coverletterValid }}",
+              "rightValue": 1,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        5072,
+        1488
+      ],
+      "id": "82b17c14-fd46-423a-8d0f-6bc433895c9c",
+      "name": "Cover Letter Ready - OpenRouter"
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first().json;\nconst source = \"ollama\";\nconst score = Number($('If Generate Cover Letter').first().json.score ?? -1);\n\nfunction toRaw(value) {\n  if (value == null) return \"\";\n  if (typeof value === \"string\") return value;\n  try {\n    return JSON.stringify(value);\n  } catch (error) {\n    return String(value);\n  }\n}\n\nfunction parseJsonLike(text) {\n  const cleaned = String(text || \"\")\n    .replace(/```json/gi, \"\")\n    .replace(/```/g, \"\")\n    .trim();\n\n  const match = cleaned.match(/\\{[\\s\\S]*\\}/);\n  if (!match) return null;\n\n  try {\n    return JSON.parse(match[0]);\n  } catch (error) {\n    return null;\n  }\n}\n\nfunction normalizeText(text) {\n  return String(text || \"\")\n    .replace(/```json/gi, \"\")\n    .replace(/```/g, \"\")\n    .replace(/\\r/g, \"\")\n    .trim();\n}\n\nlet coverletter = \"\";\n\nif (input.output && typeof input.output === \"object\") {\n  coverletter = input.output.coverletter ?? \"\";\n} else {\n  const raw = toRaw(input.output ?? input.text ?? input.response ?? input.content ?? input);\n  const parsed = parseJsonLike(raw);\n  coverletter = parsed?.coverletter ?? raw;\n}\n\ncoverletter = normalizeText(coverletter);\n\nconst paragraphs = coverletter\n  .split(/\\n\\s*\\n/)\n  .map((paragraph) => paragraph.trim())\n  .filter(Boolean);\n\nconst isValid = paragraphs.length === 2 && paragraphs.every((paragraph) => {\n  const words = paragraph.split(/\\s+/).filter(Boolean);\n  return words.length >= 35;\n});\n\nreturn [{\n  json: {\n    score,\n    coverletter: isValid ? coverletter : \"\",\n    coverletterValid: isValid ? 1 : 0,\n    coverletterSource: source,\n    coverletterError: isValid ? \"\" : `Invalid cover letter output from ${source}`,\n    rawModelOutput: toRaw(input.output ?? input.text ?? input.response ?? input.content ?? input)\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        5536,
+        1888
+      ],
+      "id": "47a593f5-7207-4a4b-a278-cc0fc66bc43e",
+      "name": "Parse Cover Letter - Ollama"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "444adf6d-3c6d-4331-a238-20b3e9c8239d",
+              "leftValue": "={{ $json.coverletterValid }}",
+              "rightValue": 1,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        5664,
+        1888
+      ],
+      "id": "ac58fcf5-d21b-4779-ad1d-a394f2a4ec2f",
+      "name": "Cover Letter Ready - Ollama"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "9a47822b-7a93-454a-a5ef-54a894f365b3",
+              "name": "score",
+              "value": "={{ $('If Generate Cover Letter').item.json.score }}",
+              "type": "number"
+            },
+            {
+              "id": "e5e60114-c681-482a-8f8f-db3c33779243",
+              "name": "coverletter",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "689951d5-0ad8-4d74-846d-2d07f8c976a9",
+              "name": "coverletterValid",
+              "value": 0,
+              "type": "number"
+            },
+            {
+              "id": "78ac768e-30a9-4fd8-8be3-6e48a2dba390",
+              "name": "coverletterSource",
+              "value": "default",
+              "type": "string"
+            },
+            {
+              "id": "5118ba21-05f5-438f-93ab-a4c6c03b3935",
+              "name": "coverletterError",
+              "value": "={{ $json.error?.message || $json.coverletterError || $json.message || 'All cover letter providers failed or returned invalid output' }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        5664,
+        2208
+      ],
+      "id": "0907998d-67a2-4949-a142-6d6e46f039c6",
+      "name": "Cover Letter Failure Default"
+    },
+    {
+      "parameters": {
+        "maxItems": 20
+      },
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        6400,
+        992
+      ],
+      "id": "4a4328dc-fee8-4717-80c4-4f2245eccf29",
+      "name": "Limit"
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first().json;\n\nconst keyword = (input.Keyword || \"\").trim();\nconst location = (input.Location || \"\").trim();\nconst experienceLevel = (input[\"Experience Level\"] || \"\").trim();\nconst remote = (input.Remote || \"\").trim();\nconst jobType = (input[\"Job Type\"] || \"\").trim();\nconst easyApply = input[\"Easy Apply\"];\nconst start = input.Start ?? 0;\n\n// GEO MAP\nconst geoMap = {\n  india: \"102713980\",\n  chennai: \"106888327\",\n  bengaluru: \"105214831\",\n  bangalore: \"105214831\",\n  hyderabad: \"104869687\",\n  mumbai: \"106164952\",\n  delhi: \"115918471\"\n};\n\n// PARAMS OBJECT\nconst params = [];\n\n// always add this\nparams.push(\"f_TPR=r86400\");\n\n// KEYWORD\nif (keyword) {\n  const cleanKeyword = keyword\n    .replace(/\\n/g, \" \")\n    .replace(/\\s+/g, \" \")\n    .trim();\n\n  params.push(`keywords=${encodeURIComponent(cleanKeyword)}`);\n}\n\n// LOCATION + GEOID\nif (location) {\n  const loc = location.toLowerCase();\n\n  params.push(`location=${encodeURIComponent(location)}`);\n\n  if (geoMap[loc]) {\n    params.push(`geoId=${geoMap[loc]}`);\n  }\n}\n\n// EXPERIENCE\nif (experienceLevel) {\n  const expMap = {\n    \"Internship\": \"1\",\n    \"Entry Level\": \"2\",\n    \"Associate\": \"3\",\n    \"Mid-Senior level\": \"4\",\n    \"Director\": \"5\",\n    \"Executive\": \"6\"\n  };\n\n  const values = experienceLevel\n    .split(\",\")\n    .map(e => expMap[e.trim()])\n    .filter(Boolean);\n\n  if (values.length) {\n    params.push(`f_E=${values.join(\",\")}`);\n  }\n}\n\n// REMOTE\nif (remote) {\n  const remoteMap = {\n    \"On-Site\": \"1\",\n    \"Remote\": \"2\",\n    \"Hybrid\": \"3\"\n  };\n\n  const values = remote\n    .split(\",\")\n    .map(r => remoteMap[r.trim()])\n    .filter(Boolean);\n\n  if (values.length) {\n    params.push(`f_WT=${values.join(\",\")}`);\n  }\n}\n\n// JOB TYPE\nif (jobType) {\n  const jobMap = {\n    \"Full-time\": \"F\",\n    \"Part-time\": \"P\",\n    \"Contract\": \"C\",\n    \"Temporary\": \"T\",\n    \"Volunteer\": \"V\",\n    \"Internship\": \"I\",\n    \"Other\": \"O\"\n  };\n\n  const values = jobType\n    .split(\",\")\n    .map(j => jobMap[j.trim()])\n    .filter(Boolean);\n\n  if (values.length) {\n    params.push(`f_JT=${values.join(\",\")}`);\n  }\n} else if (/intern/i.test(keyword)) {\n  // AUTO FIX\n  params.push(\"f_JT=I\");\n}\n\n// EASY APPLY (optional)\nif (easyApply === true || easyApply === \"true\") {\n  params.push(\"f_AL=true\");\n}\n\n// PAGINATION\nparams.push(`start=${start}`);\n\n// FINAL URL\nconst url = `https://www.linkedin.com/jobs/search?${params.join(\"&\")}&f_TPR=86400`;\n\nreturn [{ json: { url } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4368,
+        912
+      ],
+      "id": "ac2c599c-7f57-44a4-8c3e-cc3a857b943c",
+      "name": "Url creation"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Score - Gemini": {
+      "main": [
+        [
+          {
+            "node": "Parse Score - Gemini",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Score - OpenRouter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Score Ready - Gemini": {
+      "main": [
+        [
+          {
+            "node": "If Generate Cover Letter",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Score - OpenRouter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Score - OpenRouter": {
+      "main": [
+        [
+          {
+            "node": "Parse Score - OpenRouter",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Score - Ollama",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Score Ready - OpenRouter": {
+      "main": [
+        [
+          {
+            "node": "If Generate Cover Letter",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Score - Ollama",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Score - Ollama": {
+      "main": [
+        [
+          {
+            "node": "Parse Score - Ollama",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Score Failure Default",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Score Ready - Ollama": {
+      "main": [
+        [
+          {
+            "node": "If Generate Cover Letter",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Score Failure Default",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Generate Cover Letter": {
+      "main": [
+        [
+          {
+            "node": "Cover Letter - Gemini",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Append Company details in Result Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cover Letter - Gemini": {
+      "main": [
+        [
+          {
+            "node": "Parse Cover Letter - Gemini",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Cover Letter - OpenRouter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cover Letter Ready - Gemini": {
+      "main": [
+        [
+          {
+            "node": "Append Company details in Result Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Cover Letter - OpenRouter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cover Letter - OpenRouter": {
+      "main": [
+        [
+          {
+            "node": "Parse Cover Letter - OpenRouter",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Cover Letter - Ollama",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cover Letter Ready - OpenRouter": {
+      "main": [
+        [
+          {
+            "node": "Append Company details in Result Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Cover Letter - Ollama",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cover Letter - Ollama": {
+      "main": [
+        [
+          {
+            "node": "Parse Cover Letter - Ollama",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Cover Letter Failure Default",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cover Letter Ready - Ollama": {
+      "main": [
+        [
+          {
+            "node": "Append Company details in Result Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Cover Letter Failure Default",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Download file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download file": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Url creation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Jobs from LinkedIn": {
+      "main": [
+        [
+          {
+            "node": "Extract Links",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Links": {
+      "main": [
+        [
+          {
+            "node": "Deduplicate Links",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Deduplicate Links": {
+      "main": [
+        [
+          {
+            "node": "Split Links",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Links": {
+      "main": [
+        [
+          {
+            "node": "Limit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Company HTTP",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Company HTTP": {
+      "main": [
+        [
+          {
+            "node": "Extract Company Details",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Company Details": {
+      "main": [
+        [
+          {
+            "node": "Company Details",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Score Gemini Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Score - Gemini",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Company Details": {
+      "main": [
+        [
+          {
+            "node": "Score - Gemini",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Score OpenRouter Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Score - OpenRouter",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Score Ollama Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Score - Ollama",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Score - Gemini": {
+      "main": [
+        [
+          {
+            "node": "Score Ready - Gemini",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Score - OpenRouter": {
+      "main": [
+        [
+          {
+            "node": "Score Ready - OpenRouter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Score - Ollama": {
+      "main": [
+        [
+          {
+            "node": "Score Ready - Ollama",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Score Failure Default": {
+      "main": [
+        [
+          {
+            "node": "If Generate Cover Letter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cover Letter Gemini Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Cover Letter - Gemini",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cover Letter OpenRouter Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Cover Letter - OpenRouter",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Cover Letter - Gemini": {
+      "main": [
+        [
+          {
+            "node": "Cover Letter Ready - Gemini",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cover Letter Ollama Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Cover Letter - Ollama",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Cover Letter - OpenRouter": {
+      "main": [
+        [
+          {
+            "node": "Cover Letter Ready - OpenRouter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Cover Letter - Ollama": {
+      "main": [
+        [
+          {
+            "node": "Cover Letter Ready - Ollama",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cover Letter Failure Default": {
+      "main": [
+        [
+          {
+            "node": "Append Company details in Result Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append Company details in Result Sheet": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a text message": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Url creation": {
+      "main": [
+        [
+          {
+            "node": "Fetch Jobs from LinkedIn",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "fa93eb0b-eca7-4425-a087-5995f945c8c5",
+  "meta": {
+    "instanceId": "18e25cf7e9b5120aeaf7c1a49ba1b38a6221a0a9a9f042ab2becd49c26c8ca2f"
+  },
+  "id": "BxkLfzmX6bw66KFS",
+  "tags": []
+}
