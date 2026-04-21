@@ -1,0 +1,81 @@
+# =========================
+# OS Files
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# Node.js
+# =========================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+
+# =========================
+# Python (if used anywhere)
+# =========================
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.sqlite3
+*.db
+.env
+
+# =========================
+# n8n / Workflow Temp
+# =========================
+.n8n/
+*.log
+
+# =========================
+# Environment Variables (IMPORTANT)
+# =========================
+.env
+.env.local
+.env.*.local
+
+# =========================
+# API Keys / Secrets
+# =========================
+config.json
+credentials.json
+secrets.json
+
+# =========================
+# Logs
+# =========================
+logs/
+*.log
+
+# =========================
+# Build / Dist
+# =========================
+dist/
+build/
+
+# =========================
+# IDE Files
+# =========================
+.vscode/
+.idea/
+*.swp
+
+# =========================
+# Mac/Linux Temp
+# =========================
+*.tmp
+*.temp
+
+# =========================
+# Coverage Reports
+# =========================
+coverage/
+
+# =========================
+# Misc
+# =========================
+*.bak
+*.backup
