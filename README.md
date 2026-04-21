@@ -59,28 +59,26 @@ The system follows a structured pipeline:
 ---
 
 ## Project Structure
+```text
 linkedin-job-scraper/
 │
 ├── workflows/
-│ └── linkedin_job_scraper_workflow.json # Main n8n workflow
+│   └── linkedin-job-scraper.json
 │
 ├── docs/
-│ ├── setup-guide.md # Setup and installation guide
-│ ├── architecture.md # System architecture documentation
+│   ├── setup.md
+│   ├── architecture.md
+│   └── screenshots/
+│       ├── workflow.png
+│       ├── google-sheet-output.png
+│       └── telegram-output.png
 │
 ├── assets/
-│ └── workflow.png # Workflow screenshot (optional)
+│   └── preview.png
 │
-├── config/
-│ └── sample_input_sheet.md # Sample Google Sheets format
-│
-├── scripts/
-│ └── url_builder.js # (Optional) Extracted URL generation logic
-│
-├── .env.example # Environment variables template
-├── .gitignore # Ignored files and folders
-├── README.md # Project overview
-├── LICENSE # License file (optional)
+├── .gitignore
+└── README.md
+```
 
 
 ---
